@@ -6,19 +6,14 @@ from geopy.geocoders import Nominatim
 import pandas as pd
 import math
 import numpy as np
-
-
-def coordinatesToMercator(country):
-	location = geolocator.geocode(country) 
-	x = r_major * math.radians(location.longitude)
-	scale = x/location.longitude
-	y = 180.0/math.pi * math.log(math.tan(math.pi/4.0 + location.latitude * (math.pi/180.0)/2.0)) * scale
-	return x, y
+from bokeh.palettes import Viridis256
+from bokeh.models.mappers import LinearColorMapper
+from bokeh.transform import transform
 
 def calcMean(dataFrame, query=None):
 	if(query):
 		dataFrame = dataFrame.query(query)
-	return dataFrame.price_change.mean() 
+	return dataFrame.price_change.mean()
 
 priceDf = pd.read_csv('data/only_complete_years_data_percentages.csv', encoding='latin-1')
 priceDf.rename(columns={'adm0_id': 'country_ID', 'adm0_name': 'country', 'adm1_id' : 'district_ID', \
@@ -28,41 +23,49 @@ priceDf.rename(columns={'adm0_id': 'country_ID', 'adm0_name': 'country', 'adm1_i
 	                   'um_name' : 'unit', 'mp_month' : 'month', 'mp_year' : 'year', 'mp_price' : 'price_change', \
 	                   'mp_commoditysource' : 'source'}, inplace=True)
 
+# priceDf = priceDf.head(100)
+
+locationDf = pd.read_csv('marketlocations.csv', encoding='latin-1')
+
 x_coordinates = np.array([])
 y_coordinates = np.array([])
 corresponding_countries = np.array([])
 means = np.array([])
 markets = np.array([])
+price_changes = np.array([])
+
+# year = "2010"
+# month = "01"
+product = "Wheat"
+
+priceDf = priceDf.query('_product == "{}"'.format(product))
+# & month == "{}" & year == "year"'.format(product, month, year))
+print(priceDf)
 
 
-#
-# TODO: Calculation of mean price and display this
-#
 # Creation of arrays from dataframe
 country_list = list(set(priceDf['country'].tolist()))
-geolocator = Nominatim()
-r_major = 6378137.000
 for country in country_list:
-	print("Check1")
 	countryDf = priceDf.query('country == "{}"'.format(country))
-	print("check2")
 	market_list = list(set(priceDf['market'].tolist()))
 	for market in market_list:
 		mean = calcMean(countryDf, 'market == "{}"'.format(market))
 		if not np.isnan(mean):
-			print("Building")
-			rawlocation = ("{} {}".format(country, market))
-			print(rawlocation) 
-			rawlocation = str(rawlocation)
-			#try:
-			x, y = coordinatesToMercator(rawlocation)
-			x_coordinates = np.append(x_coordinates, x)
-			y_coordinates = np.append(y_coordinates, y)
-			corresponding_countries = np.append(corresponding_countries, country)
-			means = np.append(means, mean)
-			markets = np.append(markets, market)
-		#except:
-			print("location determination failed")
+			try:
+				# Storing Location Information
+				tempLocDf = locationDf.query('country == "{}" & market == "{}"'.format(country, market))
+				x_coordinates = np.append(x_coordinates, tempLocDf.x_location)
+				y_coordinates = np.append(y_coordinates, tempLocDf.y_location)
+				corresponding_countries = np.append(corresponding_countries, country)
+				markets = np.append(markets, market)
+
+				# Storing datapoint information
+				means = np.append(means, mean)
+				price_change = mean
+				price_changes = np.append(price_changes, price_change)
+
+			except:
+				print("location determination failed")
 
 
 # Declaration of the source of the data
@@ -72,6 +75,7 @@ source = ColumnDataSource(data=dict(
 	country = corresponding_countries,
 	mean = means,
 	market = markets,
+	price_change = price_changes
 	))
 
 
@@ -80,14 +84,20 @@ TOOLTIPS=[
     ("Country", "@country"),
     ("mean", "@mean"),
     ("market", "@market"),
+	("price change", "@price_change"),
 ]
+
+
+mapper = LinearColorMapper(palette=Viridis256, low=-0.2, high=0.2)
+#colors= {'field': price_changes, 'transform': color_mapper}
 
 # range bounds supplied in web mercator coordinates
 p = figure(x_range=(-6000000, 6000000), y_range=(-1000000, 7000000),
            x_axis_type="mercator", y_axis_type="mercator", tooltips=TOOLTIPS)
 p.add_tile(CARTODBPOSITRON)
 
-p.circle('x_coordinate', 'y_coordinate', size = 20, source=source, color="#FB8072", fill_alpha=0.2)
+
+p.circle('x_coordinate', 'y_coordinate', size = 20, source=source, color=transform('price_change', mapper), fill_alpha=0.2)
 
 
 #
