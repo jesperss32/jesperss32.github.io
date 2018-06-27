@@ -71,7 +71,7 @@ if __name__ == "__main__":
 	                   'cur_name' : 'currency', 'pt_id' : 'sale_ID', 'pt_name' : 'sale', 'um_id' : 'unit_ID', \
 	                   'um_name' : 'unit', 'mp_month' : 'month', 'mp_year' : 'year', 'mp_price' : 'price', \
 	                   'mp_commoditysource' : 'source'}, inplace=True)
-
+    # minimum number of entries to be selected
     minimum = 20
     combinationSelection = findBestCombinations(minimum)
     tabList = []
