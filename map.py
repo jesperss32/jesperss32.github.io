@@ -87,7 +87,7 @@ def generatePlot(priceDf, locationDf, year, product):
 	mapper = LinearColorMapper(palette=RdYlGn[9], low=-0.3, high=0.3)
 
 	# Actual plot Creation
-	p = figure(width = 1200, height = 600, x_range=(-12000000, 18000000), y_range=(-4000000, 9000000),
+	p = figure(width = 1000, height = 600, x_range=(-12000000, 18000000), y_range=(-4000000, 9000000),
 	           x_axis_type="mercator", y_axis_type="mercator", tooltips=TOOLTIPS)
 	p.add_tile(CARTODBPOSITRON)
 	p.circle('x_coordinate', 'y_coordinate', size = 20, source=source, color=transform('price_change', mapper), fill_alpha=0.4)
@@ -95,23 +95,26 @@ def generatePlot(priceDf, locationDf, year, product):
 	p.add_layout(color_bar, 'right')
 	return p
 
+product = input("Please enter productname: ")
+
 tabbies = []
 
 for year in range(2000, 2017):
-	plot = generatePlot(orinpriceDf, orinlocationDf, year, "Wheat")
+	plot = generatePlot(orinpriceDf, orinlocationDf, year, product)
 	tab = Panel(child=plot, title=str(year))
 	print(tab)
 	tabbies.append(tab)
 print(tabbies)
 tabs = Tabs(tabs=tabbies)
 
+filepath = "components/mapplot{}.js".format(product)
 
 #
 # Code for transferring it for a webpage
 #
-js, tag = autoload_static(tabs, CDN, "components/mapplotWheat.js")
+js, tag = autoload_static(tabs, CDN, filepath)
 
-with open("components/mapplotWheat.js", "w+") as f:
+with open(filepath, "w+") as f:
 	f.write(js)
 
 print(tag)
