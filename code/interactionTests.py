@@ -7,6 +7,7 @@ import datetime as dt
 from bokeh.layouts import column
 from bokeh.models import CustomJS, ColumnDataSource, Slider
 from bokeh.plotting import Figure, output_file, show
+from bokeh.io import curdoc
 
 # pandas and numpy for data manipulation
 import pandas as pd
