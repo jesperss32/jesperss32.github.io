@@ -40,7 +40,9 @@ def generatePlot(priceDf, locationDf, year, product):
 	# & month == "{}" & year == "year"'.format(product, month, year))
 	print(priceDf)
 
-
+	d = {'x_location': [12.123123], 'y_location': [12.32234], 'country': ["testcountry"], 'market': ["testmarket"], 'means': [12.34], 'price_changes': [12.34]}
+	informationdf = pd.DataFrame(data=d)
+	print(informationdf)
 	# Creation of arrays from dataframe
 	country_list = list(set(priceDf['country'].tolist()))
 	for country in country_list:
@@ -52,28 +54,53 @@ def generatePlot(priceDf, locationDf, year, product):
 				try:
 					# Storing Location Information
 					tempLocDf = locationDf.query('country == "{}" & market == "{}"'.format(country, market))
-					x_coordinates = np.append(x_coordinates, tempLocDf.x_location)
-					y_coordinates = np.append(y_coordinates, tempLocDf.y_location)
-					corresponding_countries = np.append(corresponding_countries, country)
-					markets = np.append(markets, market)
 
-					# Storing datapoint information
-					means = np.append(means, mean)
-					price_change = mean
-					price_changes = np.append(price_changes, price_change)
+					print("x_location")
+					x_loc = tempLocDf.iloc[0]['x_location']
+					y_loc = tempLocDf.iloc[0]['y_location']
+
+					print(tempLocDf)
+					print(x_loc)
+
+					newdata= {'x_location': [x_loc],
+						'y_location': [y_loc],
+						'country': [country],
+						'market': [market],
+						'means': [mean],
+						"price_changes": [mean]}
+					print("this is the new data")
+					print(newdata)
+					tempdf = pd.DataFrame(data=newdata)
+					print("this is the new data in a frame")
+					print(tempdf)
+					informationdf = informationdf.append(tempdf)
+
+
+
+
+					# x_coordinates = np.append(x_coordinates, tempLocDf.x_location)
+					# y_coordinates = np.append(y_coordinates, tempLocDf.y_location)
+					# corresponding_countries = np.append(corresponding_countries, country)
+					# markets = np.append(markets, market)
+					#
+					# # Storing datapoint information
+					# means = np.append(means, mean)
+					# price_change = mean
+					# price_changes = np.append(price_changes, price_change)
 
 				except:
 					print("location determination failed")
-
+	print(informationdf.head(5))
+	informationdf.drop([0])
 
 	# Declaration of the source of the data
 	source = ColumnDataSource(data=dict(
-		x_coordinate = x_coordinates,
-		y_coordinate = y_coordinates,
-		country = corresponding_countries,
-		mean = means,
-		market = markets,
-		price_change = price_changes
+		x_coordinate = informationdf.x_location,
+		y_coordinate = informationdf.y_location,
+		country = informationdf.country,
+		mean = informationdf.means,
+		market = informationdf.market,
+		price_change = informationdf.price_changes
 		))
 
 	# Declaration of what is shown in the tooltips
