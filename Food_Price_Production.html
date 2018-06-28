@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>EDA</title>
+		<title>Foodprices vs Production</title>
 		<link
 	    href="https://cdn.pydata.org/bokeh/release/bokeh-0.13.00.min.css"
 	    rel="stylesheet" type="text/css">
@@ -63,6 +63,27 @@
 	<body>
 		<div w3-include-html="components/navBar.html"></div>
 
+		<nav aria-label="breadcrumb">
+			<div class="container">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+			    <li class="breadcrumb-item active" aria-current="page">Foodprices vs Production</li>
+			  </ol>
+			</div>
+		</nav>
+
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+		    <h1 class="display-4">Food Prices in Correlation with Production Numbers</h1>
+		    <p class="lead">
+					This page shows linear regression models for various products. Each graph has on the x-axis the production and on the y-axis the product price. Only products which have a significant correlation between production and their price are displayed.
+				</p>
+				<p class="lead">
+					These figures show that linear regression succeeds in detecting trends in foodprices based on the production data. Their neet to be taken in account that these predictions are based on very limited data which make them very subspectible to certain changes and outliers.
+				</p>
+		  </div>
+		</div>
+
 		<div class="jumbotron jumbotron-fluid">
 			<div class="container">
 				<div class="row">
@@ -71,6 +92,9 @@
 			    </div>
 			    <div class="col">
 			      <script src="jesperss32.github.io/components/productioncorrelation/Chad_Maize(white).js" id="c8b27633-f652-4f3d-8531-ea7106a6ee75"></script>
+			    </div>
+					<div class="col">
+			      <script src="jesperss32.github.io/components/productioncorrelation/Zambia_Maize(white).js" id="da915329-059c-4f37-987e-7b99285c8395"></script>
 			    </div>
 			  </div>
 			</div>
@@ -181,25 +205,16 @@
 			    <div class="col">
 			     <script src="jesperss32.github.io/components/productioncorrelation/Tajikistan_Wheat.js" id="337956cb-9e5b-42f9-969a-ba0db7eb7bf7"></script>
 			    </div>
-					<div class="col">
-			      <script src="jesperss32.github.io/components/productioncorrelation/Zambia_Maize(white).js" id="da915329-059c-4f37-987e-7b99285c8395"></script>
-			    </div>
 			  </div>
 			</div>
 		</div>
 
 
-		<div class="jumbotron jumbotron-fluid">
-		  <div class="container">
-		    <h1 class="display-4">Fluid jumbotron</h1>
-		    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-		  </div>
-		</div>
+
 
 		<div class="jumbotron jumbotron-fluid">
 		  <div class="container">
-		    <h1 class="display-4">Fluid jumbotron</h1>
-		    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+		    <p class="lead">The following graphs shows correlations between change in food price and change in prodcution over continents. All the countries are assigned to their continent, and only combinations with a significant correlation are drawn.</p>
 		  </div>
 		</div>
 
@@ -229,6 +244,14 @@
 			</div>
 		</div>
 
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+				<h1 class="display-4">Conclusion</h1>
+		    <p class="lead">
+						this states the conclusion of the webpage
+				</p>
+		  </div>
+		</div>
 
 
 		<script>
