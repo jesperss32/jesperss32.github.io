@@ -44,41 +44,100 @@
 		  </ol>
 		</nav>
 
+
 		<div class="jumbotron jumbotron-fluid">
 		  <div class="container">
-		    <h1 class="display-4">Title</h1>
-		    <p class="lead">text</p>
-		    <p class="lead">Click entries in the legend to hide them</p>
+		    <h1 class="display-4">Are there products where the price differences show strong correlations?</h1>
+		    <p class="lead">To figure this out, we went through all possible combinations
+					of products, found all countries where there was data for both products,
+					and took the mean of the spearman correlations between these countries.</p>
+      </div>
+		</div>
+
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+				<h3 class="display-6">What the graphs show</h3>
+		    <p class="lead">Below are graphs of the price differences over time of products that
+				have a significant correlation. With these, it is possible to look more
+				in-depth at the products and find explanations for some unlikely or
+			 	unexpected correlations. For products with a lot of countries, graphs can quickly
+				become cluttered. To get a better look, simply click on legend entries to hide them
+				or enlarge a section. the name of each tab shows the products between
+					which there is a correlation, the spearman value (smv) and the number of
+					countries that have data for both products.</p>
+
+      </div>
+		</div>
+
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+				<h3 class="display-6">Strong correlations between similar products</h3>
+				<p class="lead">For a lot of the correlations we found the products were
+					very similar to each other. This graph includes some of these products,
+					like different kinds of meat, white and yellow maize, red and white onions
+					and different qualities of wheat. Of course it makes sense that these products
+					show a strong correlation.</p>
+
+				<!-- INSERT script for correlations plots here-->
 				<script
-    src="components/priceCorrelationsPlot.js"
-    id="c96deb0f-b72d-412d-9d01-4dbcdaa21f5a"
-    data-bokeh-model-id="7dae7e2f-3574-45dc-b8f1-3a6411bb1446"
-    data-bokeh-doc-id="b0ea52cc-ea88-4e0f-a05e-2a296fa362be"
+    src="components/priceCorrelationsPlot1.js"
+    id="50a38e8b-0f8c-40ab-b2a8-a64d68489315"
+    data-bokeh-model-id="bbd7de04-0643-4d80-9bf1-e61e1b802bec"
+    data-bokeh-doc-id="630d9575-79b8-408c-a6d5-3998a87fd2df"
 ></script>
 
 
 
 
+      </div>
+		</div>
+
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+				<h3 class="display-6">Strong correlations between different products</h3>
+				<p class="lead">We also found some correlations between different products, which
+					can sometimes be hard to explain. Products like garlic and onions are different, but still grow
+				under roughly the same conditions and can be used similarly in meals.
+				Foods like cassava flour and rice are both major sources of carbohydrates, which is why the prices
+				of these products influence each other.</p>
+
+				<!-- INSERT script for correlations plots here-->
+				<script
+    src="components/priceCorrelationsPlot3.js"
+    id="f8a1891e-9c49-493f-a23b-0e4e4033f2f1"
+    data-bokeh-model-id="5f78ba65-5b53-4c58-befd-7af220013a79"
+    data-bokeh-doc-id="3fd8b5d3-b14c-4b4c-aaa4-b2f98e898092"
+></script>
 
 
 
 
+      </div>
+		</div>
 
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+				<h3 class="display-6">Correlations that were found in only one country</h3>
+				<p class="lead">In the previous graphs, we didn't include correlations between
+					products that were just in one country, because the influence of the local economy causes
+					a lot of products to have a stronger correlation than would be expected.
+					This is why raised the minimum correlation value to 0.7 and plotted some of the products
+					with the highest or most interesting correlations here.</p>
+				<p class="lead">Especially Laos has a lot of high correlations between products that weren't
+				found anywhere else. This is mostly because Laos has data for a lot of different kinds of meat and rice.
+				More interesting are the negative correlations between catfish and other products. While most products
+				cheaper since 2014, catfish became more expensive. By 2012, the catfish population had already dropped by 90%,
+				but regional government intervention against fishing helped numbers bounce back a bit. However, in that year the building of the Xayaburi dam started.
+				The catfish population there was predicted to go extict as a result of this, which probably caused the catfish price to increase,
+			 	contrary to other products.</p>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				<!-- INSERT script for correlations plots here-->
+				<script
+    src="components/priceCorrelationsPlot2.js"
+    id="cfdfd706-632c-4dae-a7c8-e428280db67e"
+    data-bokeh-model-id="2830a2fc-9faa-4c61-a0de-56a99dcec8a7"
+    data-bokeh-doc-id="3d1c0434-f794-4f81-acac-94f1e64208ed"
+></script>
 
 
 

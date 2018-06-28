@@ -7,32 +7,45 @@ import datetime as dt
 from bokeh.models.widgets import Panel, Tabs
 from bokeh.models.glyphs import MultiLine
 from bokeh.palettes import Category10
+import ast
 
-def plotCorrelation(df):
-    plot = figure(title="St", x_axis_type="datetime", plot_width=1000)
+def plotCorrelation(df, combinationSelection, minimumCountries, minimumSmv):
+    plot = figure(title="St", x_axis_type="datetime", plot_width=1000, plot_height=1000)
     plot.grid.grid_line_color = 'Grey'
     plot.background_fill_color = '#eeeeee'
-    combinations = [('Wheat flour (first grade)', 'Wheat flour (high quality)', ['Kyrgyzstan', 'Tajikistan'])]
+    combinations = loadCombinations(minimumCountries, minimumSmv, combinationSelection)
     tabList = []
     for combination in combinations:
-        #allLists = plotCombination(df, combination)
-        #datesLists = allLists[0]
-        #pricesLists = allLists[1]
-        #print(len(datesLists))
-        #print(len(pricesLists))
-        #plot = figure(title="Correlation")
-        #palette = Category20[4]
-        #plot.multi_line(datesLists, pricesLists, line_color = palette)
-        #show(plot)
         plot = plotCombination(df, combination)
-        tab = Panel(child=plot, title=str(combination[0]) + ' and ' + str(combination[1]))
+        # add extra titles with add_layout(...)
+        plot.add_layout(Title(text="The average spearhead correlation is " + "{0:.2f}".format(combination[3]) + ", taking the mean over " + str(combination[4]) + " countries", align="center"), "below")
+        tab = Panel(child=plot, title=str(combination[0]) + ' and ' + str(combination[1]) + ', smv: ' + "{0:.2f}".format(combination[3]) + ", countries: " + str(combination[4]))
         tabList.append(tab)
     tabs = Tabs(tabs=tabList)
     return tabs
 
-def plotCombination(df, combination):
+def loadCombinations(minimumCountries, minimumSpearHeadValue, combinationSelection):
+    comboDf = pd.read_csv("data/product_correlations_monthly_minimal_3yrs.csv")
+    combinations = []
+    for row in comboDf.itertuples():
+        nCountries = row[4]
+        spearMan = row[2]
+        if nCountries >= minimumCountries and abs(spearMan) >= minimumSpearHeadValue:
+            products = row[1]
+            products = ast.literal_eval(products)
+            if (products[0], products[1]) in combinationSelection:
 
-    palette = Category10[10]
+                countries = row[3]
+                countries = ast.literal_eval(countries)
+
+                combination = (products[0], products[1], countries, spearMan, nCountries)
+                combinations.append(combination)
+    return combinations
+
+def plotCombination(df, combination):
+    # this palette only works if there are no more than 10 countries in a plot
+    # it works with a minimumSpearHeadValue of 0.6
+    palette = Category10[10] * 2
     product1 = combination[0]
     product2 = combination[1]
     countries = combination[2]
@@ -54,23 +67,16 @@ def plotCombination(df, combination):
     datesLists = []
     pricesLists = []
     for i, country in enumerate(countries):
-        # add extra titles with add_layout(...)
-        plot.add_layout(Title(text="Spearhead correlation in " + str(country) + ": correlation_value", align="center"), "below")
-
         priceDateLists1 = findProductPriceLists(df, product1, country)
         pricesProduct1 = priceDateLists1[0]
         datesProduct1 = priceDateLists1[1]
         product1Name = str(product1) + ', ' + str(country)
-        plot.line(datesProduct1, pricesProduct1, line_color = palette[i], line_dash = 'solid', line_width = 2, legend = product1Name)
-        #datesLists.append(datesProduct1)
-        #pricesLists.append(pricesProduct1)
+        plot.line(datesProduct1, pricesProduct1, line_color = palette[i], line_dash = 'solid', line_width = 1.2, legend = product1Name)
         priceDateLists2 = findProductPriceLists(df, product2, country)
         pricesProduct2 = priceDateLists2[0]
         datesProduct2 = priceDateLists2[1]
         product2Name = str(product2) + ', ' + str(country)
-        plot.line(datesProduct2, pricesProduct2, line_color = palette[i], line_dash = 'dashed', line_width = 2, legend = product2Name)
-        #datesLists.append(datesProduct2)
-        #pricesLists.append(pricesProduct2)
+        plot.line(datesProduct2, pricesProduct2, line_color = palette[i], line_dash = 'dashed', line_width = 1.8, legend = product2Name)
         plot.legend.location = "top_left"
         plot.legend.click_policy="hide"
     return plot
@@ -91,17 +97,54 @@ def findProductPriceLists(df, product, country):
 
 
 priceDf = pd.read_csv("data/only_complete_years_data_percentages.csv")
-tabs = plotCorrelation(priceDf)
-js, tag = autoload_static(tabs, CDN, "components/priceCorrelationsPlot.js")
-#plot = figure()
-#plot.line([0, 1, 2], [0, 1, 2])
-#plot.line([0, 1, 2], [0, 2, 4])
-#show(plot)
+
+# Third selection
+combinationSelection3 = [('Eggs', 'Sweet potatoes'), ('Oil (vegetable)', 'Meat (pork)'), ('Fish (fresh)', 'Garlic'),
+        ('Cassava flour', 'Rice (imported, Tanzanian)'), ('Beans (red)',  'Cassava (dry)'), ('Garlic', 'Onions (white)')]
+tabs3 = plotCorrelation(priceDf, combinationSelection3, 2, 0.6)
+js3, tag3 = autoload_static(tabs3, CDN, "components/priceCorrelationsPlot3.js")
+
 # the javascript code is written to a file, in this case components/testplot.js
-with open("components/priceCorrelationsPlot.js", "w+") as f:
+with open("components/priceCorrelationsPlot3.js", "w+") as f:
+    f.write(js3)
+
+#place this tag where the plot should be on a page
+# for now, just copy paste it from the terminal
+# IMPORTANT: if this code is ran again, the tag needs to be replaced
+print("Tag 3: ")
+print(tag3)
+
+
+# First selection
+combinationSelection1 = [('Maize (white)', 'Maize (yellow)'), ('Wheat flour (first grade)', 'Wheat flour (high quality)'),
+                ('Meat (chicken)', 'Meat (mutton)'), ('Onions (red)', 'Onions (white)'),
+                ('Livestock (Goat)', 'Livestock (Sheep)')]
+tabs1 = plotCorrelation(priceDf, combinationSelection1, 2, 0.6)
+js, tag = autoload_static(tabs1, CDN, "components/priceCorrelationsPlot1.js")
+
+# the javascript code is written to a file, in this case components/testplot.js
+with open("components/priceCorrelationsPlot1.js", "w+") as f:
     f.write(js)
 
 #place this tag where the plot should be on a page
 # for now, just copy paste it from the terminal
 # IMPORTANT: if this code is ran again, the tag needs to be replaced
+print("Tag 1: ")
 print(tag)
+
+# Second selection
+combinationSelection2 = [('Fish (snake head)', 'Fish (catfish)'), ('Sugar (brown)', 'Fish (catfish)'),
+                ('Sugar (brown)', 'Fish(snake head)'), ('Rice (coarse)', 'Rice (basmati, broken)'),
+                ('Meat (beef, first quality)', 'Meat (buffalo, first quality)')]
+tabs2 = plotCorrelation(priceDf, combinationSelection2, 1, 0.6)
+js2, tag2 = autoload_static(tabs2, CDN, "components/priceCorrelationsPlot2.js")
+
+# the javascript code is written to a file, in this case components/testplot.js
+with open("components/priceCorrelationsPlot2.js", "w+") as f:
+    f.write(js2)
+
+#place this tag where the plot should be on a page
+# for now, just copy paste it from the terminal
+# IMPORTANT: if this code is ran again, the tag needs to be replaced
+print("Tag 2: ")
+print(tag2)
