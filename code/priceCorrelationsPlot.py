@@ -99,52 +99,65 @@ def findProductPriceLists(df, product, country):
 priceDf = pd.read_csv("data/only_complete_years_data_percentages.csv")
 
 # Third selection
-combinationSelection3 = [('Eggs', 'Sweet potatoes'), ('Oil (vegetable)', 'Meat (pork)'), ('Fish (fresh)', 'Garlic'),
-        ('Cassava flour', 'Rice (imported, Tanzanian)'), ('Beans (red)',  'Cassava (dry)'), ('Garlic', 'Onions (white)')]
-tabs3 = plotCorrelation(priceDf, combinationSelection3, 2, 0.6)
-js3, tag3 = autoload_static(tabs3, CDN, "components/priceCorrelationsPlot3.js")
+#combinationSelection3 = [('Eggs', 'Sweet potatoes'), ('Oil (vegetable)', 'Meat (pork)'), ('Fish (fresh)', 'Garlic'),
+#        ('Cassava flour', 'Rice (imported, Tanzanian)'), ('Beans (red)',  'Cassava (dry)'), ('Garlic', 'Onions (white)')]
+#tabs3 = plotCorrelation(priceDf, combinationSelection3, 2, 0.6)
+#js3, tag3 = autoload_static(tabs3, CDN, "components/priceCorrelationsPlot3.js")
 
 # the javascript code is written to a file, in this case components/testplot.js
-with open("components/priceCorrelationsPlot3.js", "w+") as f:
-    f.write(js3)
+#with open("components/priceCorrelationsPlot3.js", "w+") as f:
+#    f.write(js3)
 
 #place this tag where the plot should be on a page
 # for now, just copy paste it from the terminal
 # IMPORTANT: if this code is ran again, the tag needs to be replaced
-print("Tag 3: ")
-print(tag3)
+#print("Tag 3: ")
+#print(tag3)
 
 
 # First selection
-combinationSelection1 = [('Maize (white)', 'Maize (yellow)'), ('Wheat flour (first grade)', 'Wheat flour (high quality)'),
-                ('Meat (chicken)', 'Meat (mutton)'), ('Onions (red)', 'Onions (white)'),
-                ('Livestock (Goat)', 'Livestock (Sheep)')]
-tabs1 = plotCorrelation(priceDf, combinationSelection1, 2, 0.6)
-js, tag = autoload_static(tabs1, CDN, "components/priceCorrelationsPlot1.js")
+#combinationSelection1 = [('Maize (white)', 'Maize (yellow)'), ('Wheat flour (first grade)', 'Wheat flour (high quality)'),
+#                ('Meat (chicken)', 'Meat (mutton)'), ('Onions (red)', 'Onions (white)'),
+#                ('Livestock (Goat)', 'Livestock (Sheep)')]
+#tabs1 = plotCorrelation(priceDf, combinationSelection1, 2, 0.6)
+#js, tag = autoload_static(tabs1, CDN, "components/priceCorrelationsPlot1.js")
 
 # the javascript code is written to a file, in this case components/testplot.js
-with open("components/priceCorrelationsPlot1.js", "w+") as f:
-    f.write(js)
+#with open("components/priceCorrelationsPlot1.js", "w+") as f:
+#    f.write(js)
 
 #place this tag where the plot should be on a page
 # for now, just copy paste it from the terminal
 # IMPORTANT: if this code is ran again, the tag needs to be replaced
-print("Tag 1: ")
-print(tag)
+#print("Tag 1: ")
+#print(tag)
 
 # Second selection
-combinationSelection2 = [('Fish (snake head)', 'Fish (catfish)'), ('Sugar (brown)', 'Fish (catfish)'),
-                ('Sugar (brown)', 'Fish(snake head)'), ('Rice (coarse)', 'Rice (basmati, broken)'),
-                ('Meat (beef, first quality)', 'Meat (buffalo, first quality)')]
-tabs2 = plotCorrelation(priceDf, combinationSelection2, 1, 0.6)
-js2, tag2 = autoload_static(tabs2, CDN, "components/priceCorrelationsPlot2.js")
+#combinationSelection2 = [('Fish (snake head)', 'Fish (catfish)'), ('Sugar (brown)', 'Fish (catfish)'),
+                #('Sugar (brown)', 'Fish(snake head)'), ('Rice (coarse)', 'Rice (basmati, broken)'),
+                #('Meat (beef, first quality)', 'Meat (buffalo, first quality)')]
+#tabs2 = plotCorrelation(priceDf, combinationSelection2, 1, 0.6)
+#js2, tag2 = autoload_static(tabs2, CDN, "components/priceCorrelationsPlot2.js")
 
 # the javascript code is written to a file, in this case components/testplot.js
-with open("components/priceCorrelationsPlot2.js", "w+") as f:
-    f.write(js2)
+#with open("components/priceCorrelationsPlot2.js", "w+") as f:
+#    f.write(js2)
 
 #place this tag where the plot should be on a page
 # for now, just copy paste it from the terminal
 # IMPORTANT: if this code is ran again, the tag needs to be replaced
-print("Tag 2: ")
-print(tag2)
+#print("Tag 2: ")
+#print(tag2)
+
+
+
+# top3 selection
+combinationSelection = [('Fish (snake head)', 'Fish (catfish)'), ('Sugar (brown)', 'Fish (catfish)')]
+tabs = plotCorrelation(priceDf, combinationSelection, 1, 0.6)
+js, tag = autoload_static(tabs, CDN, "components/top3Catfish.js")
+
+# the javascript code is written to a file, in this case components/testplot.js
+with open("components/top3Catfish.js", "w+") as f:
+    f.write(js)
+
+print(tag)
